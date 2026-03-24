@@ -102,12 +102,13 @@ def to_neg_base_2(n, base=-6):
     while num != 0:
 
         remainder = num % (base ** exp)
-        # n //= base
+
         if remainder != 0:
-            if exp % 2 == 1:
-                remainder += abs(base ** exp)
-            else:
-                remainder = -(abs(base ** exp) - remainder)
+            remainder -= base ** exp
+            # if exp % 2 == 1:
+            #     remainder += abs(base ** exp)
+            # else:
+            #     remainder -= abs(base ** exp)
 
         num -= remainder
         
@@ -123,6 +124,6 @@ def to_neg_base_2(n, base=-6):
 
 
 for i in range(103, 160):
-    print(f"Expansion of {i} in base 6: {to_neg_base(i, -3)}")
-    print(f"2 Expansion of {i} in base 6: {to_neg_base_2(i, -3)}")
+    print(f"Expansion of {i} in base 6: {to_neg_base(i)}")
+    print(f"2 Expansion of {i} in base 6: {to_neg_base_2(i)}")
  
