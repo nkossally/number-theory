@@ -1,3 +1,6 @@
+from encodings.punycode import digits
+
+
 def sieve_of_eratosthenes(n):
     """
     Finds all prime numbers up to n using the Sieve of Eratosthenes algorithm.
@@ -58,12 +61,8 @@ def get_expansion_2(n, base):
 def to_neg_base(n, base=-6):
     if n == 0:
         return "0"
-    
-    num = n
-    
+        
     digits = []
-    power = 1
-    remainders = []
     # Use standard decimal digits, adjust for larger bases if needed
     numerals = "0123456789abcdefghijklmnopqrstuvwxyz" 
     
@@ -78,51 +77,41 @@ def to_neg_base(n, base=-6):
         if remainder < 0:
             remainder += abs(base)
             n += 1
-
-        remainders.append(remainder * power)
-        num -= remainder * power
-        # print(f"n {n}, num {num}, remainder {remainder}")
-        power *= base
             
         digits.append(numerals[remainder])
 
-    return remainders
     # The digits are collected in reverse order (least significant first)
-    # return "".join(digits[::-1])
+    return "".join(digits[::-1])
 
+
+     
 def to_neg_base_2(n, base=-6):
     if n == 0:
         return "0"
-    
     num = n
-    
-    exp = 1
+    power = base
     remainders = []
     
     while num != 0:
+        # Calculate remainder (modulo operation in Python can return negative)
+        remainder = n % power
 
-        remainder = num % (base ** exp)
-        # n //= base
-        if remainder != 0:
-            if exp % 2 == 1:
-                remainder += abs(base ** exp)
-            else:
-                remainder = -(abs(base ** exp) - remainder)
+        # Adjust for negative remainder, as digits must be non-negative (0 to |base|-1)
+        if remainder < 0:
+            remainder += power
 
-        num -= remainder
-        
-        remainders.append(remainder )
-        # print(f"num {num}, remainder {remainder}")
-        exp += 1
-
+        remainders.append(remainder * power)
+        num -= remainder * abs(power/base)
+        print(f"num: {num}, remainder: {remainder}, power: {power}")
+        power *= base
             
-
     # The digits are collected in reverse order (least significant first)
     print(f"Remainders: {remainders}")
     return remainders
 
 
-for i in range(103, 160):
-    print(f"Expansion of {i} in base 6: {to_neg_base(i, -3)}")
-    print(f"2 Expansion of {i} in base 6: {to_neg_base_2(i, -3)}")
+
+for i in range(30, 39):
+    # print(f"Expansion of {i} in base 6: {to_neg_base(i)}")
  
+    print(f"Expansion of {i} in base 6: {to_neg_base_2(i)}")
