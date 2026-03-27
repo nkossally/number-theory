@@ -1,6 +1,7 @@
 LENGTH = 8
 BORROW = "borrow"
 CANNOT_BORROW = "cannot borrow"
+NEGATIVE_RESULT = "subtraction result is negative"
 def add_three_bits(a: str, b: str, c: int) -> (str, int):
     one_count = 0
     if a == '1':
@@ -49,7 +50,8 @@ def handle_borrow(a: str, b: str, idx):
     cpy = a
     for i in range(idx- 1, -1, -1):
         if cpy[i] == '1':
-            cpy = cpy[:i] + '01' + cpy[i+2:]
+            cpy = cpy[:i] + '0' + cpy[i+1:]
+            cpy = cpy[:idx] + '1' + cpy[idx+1:]
             return cpy
         else:
             cpy = cpy[:i] + '1' + cpy[i+1:]
@@ -67,7 +69,7 @@ def subtract_binary_strings(a: str, b: str) -> str:
         if diff == BORROW:
             a = handle_borrow(a, b, i)
             if a == CANNOT_BORROW:
-                return "subtraction result is negative"
+                return NEGATIVE_RESULT
         else:
             a = a[:i] + diff + a[i+1:]
     
@@ -90,10 +92,49 @@ def multiply_binary_strings(a: str, b: str) -> str:
     return result
 
 
-# def division_helper(a: str, b: str) -> (str, str):
+def division_helper(a: str, b: str) -> int:
+    count = 0
+    diff = subtract_binary_strings(a, b)
+    while diff != NEGATIVE_RESULT:
+        print("diff", diff)
+        count += 1
+        diff = subtract_binary_strings(diff, b)
+
+    return count
+
+def divide_binary_strings(a: str, b: str) -> (str):
+    b = b.lstrip("0")
+    res = ""
+    remainder = a
+    for i in range(LENGTH - 1, -1, -1):
+        subtrahend = b + "0" * i
+        print("subtrahend", subtrahend)
+        if len(subtrahend) > LENGTH:
+            res += "0"
+            continue
+        count = division_helper(remainder, b)
+        print(f"i {i}, subtrahend {subtrahend}, count {count}")
+        # print("count", count)
+        # quotient = "0" * (LENGTH - 1 - i)
+        # if count:
+        #     res += '1'
+        #     quotient += "1"
+        # else:               
+        #     res += '0'
+        #     quotient += "0"
+        # quotient += "0" * i
+
+        # remainder =  subtract_binary_strings(remainder, quotient)
+    res = res.ljust(LENGTH, '0')
+    print(int(res, 2), res, "remainder", remainder)
+    return res
+        
+
+
     
 
-multiply_binary_strings("1011", "1101")
+# divide_binary_strings("1111", "11")
+print(division_helper("1111", "11"))
 
-multiply_binary_strings("1011", "101")
-
+# print(subtract_binary_strings("1100", "11"))
+# print(multiply_binary_strings("111", "11"))
