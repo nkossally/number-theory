@@ -134,7 +134,6 @@ def divide_binary_strings(a: str, b: str) -> (str):
     
 
 # divide_binary_strings("1111", "11")
-print(division_helper("1111", "11"))
 
 # print(subtract_binary_strings("1100", "11"))
 # print(multiply_binary_strings("111", "11"))
