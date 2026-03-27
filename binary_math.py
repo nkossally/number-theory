@@ -96,24 +96,29 @@ def division_helper(a: str, b: str) -> int:
     count = 0
     diff = subtract_binary_strings(a, b)
     while diff != NEGATIVE_RESULT:
-        print("diff", diff)
         count += 1
         diff = subtract_binary_strings(diff, b)
 
     return count
 
 def divide_binary_strings(a: str, b: str) -> (str):
+    print(int(a, 2), int(b, 2))
     b = b.lstrip("0")
     res = ""
     remainder = a
     for i in range(LENGTH - 1, -1, -1):
         subtrahend = b + "0" * i
-        print("subtrahend", subtrahend)
+        # print("subtrahend", subtrahend)
         if len(subtrahend) > LENGTH:
             res += "0"
             continue
-        count = division_helper(remainder, b)
-        print(f"i {i}, subtrahend {subtrahend}, count {count}")
+        count = division_helper(remainder, subtrahend)
+        if count:
+            res += '1'
+            remainder = subtract_binary_strings(remainder, subtrahend)
+        else:
+            res += '0'
+        # print(f"i {i}, remainder {remainder}, subtrahend {subtrahend}, count {count}")
         # print("count", count)
         # quotient = "0" * (LENGTH - 1 - i)
         # if count:
@@ -125,7 +130,6 @@ def divide_binary_strings(a: str, b: str) -> (str):
         # quotient += "0" * i
 
         # remainder =  subtract_binary_strings(remainder, quotient)
-    res = res.ljust(LENGTH, '0')
     print(int(res, 2), res, "remainder", remainder)
     return res
         
@@ -133,7 +137,8 @@ def divide_binary_strings(a: str, b: str) -> (str):
 
     
 
-# divide_binary_strings("1111", "11")
+divide_binary_strings("1111", "11")
+divide_binary_strings("111101", "1101")
 
 # print(subtract_binary_strings("1100", "11"))
 # print(multiply_binary_strings("111", "11"))
