@@ -1,4 +1,6 @@
 LENGTH = 8
+BORROW = "borrow"
+CANNOT_BORROW = "cannot borrow"
 def add_three_bits(a: str, b: str, c: int) -> (str, int):
     one_count = 0
     if a == '1':
@@ -20,7 +22,7 @@ def subtract_two_bits(a: str, b: str):
     if a == '0' and b == '0':
         return '0'
     if a == '0' and b == '1':
-        return None
+        return BORROW
     if a == '1' and b == '0':
         return '1'
     if a == '1' and b == '1':        
@@ -41,39 +43,57 @@ def add_binary_strings(a: str, b: str) -> str:
 
 
     result = result[::-1]
-    print(result, int(result, 2))
     return result
+
+def handle_borrow(a: str, b: str, idx):
+    cpy = a
+    for i in range(idx- 1, -1, -1):
+        if cpy[i] == '1':
+            cpy = cpy[:i] + '01' + cpy[i+2:]
+            return cpy
+        else:
+            cpy = cpy[:i] + '1' + cpy[i+1:]
+    return CANNOT_BORROW
+
 
 def subtract_binary_strings(a: str, b: str) -> str:
     a = a.zfill(LENGTH)
     b = b.zfill(LENGTH)
-    result = ""
-
+    
     for i in range(LENGTH - 1, -1, -1):
 
         diff = subtract_two_bits(a[i], b[i])
-        if diff == None:
-            return None
-        result += diff
-    
-    result = result[::-1]
-    print(result, int(result, 2))
-    return result
 
-def subtract_binary_strings(a: str, b: str) -> str:
-    a = a.zfill(LENGTH)
-    b = b.zfill(LENGTH)
-   
+        if diff == BORROW:
+            a = handle_borrow(a, b, i)
+            if a == CANNOT_BORROW:
+                return "subtraction result is negative"
+        else:
+            a = a[:i] + diff + a[i+1:]
+    
+    return a
+
 
 def multiply_binary_strings(a: str, b: str) -> str:
     a = a.zfill(LENGTH)
     b = b.zfill(LENGTH)
     result = "0" * LENGTH
+    
 
-
-
-    print(result, int(result, 2))
+    for i in range(len(b) - 1, -1, -1):
+        tail = "0" * (len(b) - 1 - i)
+        if b[i] == '1':
+            transformed_a = (a + tail)[-LENGTH:]
+            result = add_binary_strings(result, transformed_a)
+            result = result[-LENGTH:]
+    print(int(result, 2), result)
     return result
 
-add_binary_strings("1010", "1101")
-add_binary_strings("1111", "1111")
+
+# def division_helper(a: str, b: str) -> (str, str):
+    
+
+multiply_binary_strings("1011", "1101")
+
+multiply_binary_strings("1011", "101")
+
