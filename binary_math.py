@@ -2,7 +2,7 @@ LENGTH = 8
 BORROW = "borrow"
 CANNOT_BORROW = "cannot borrow"
 NEGATIVE_RESULT = "subtraction result is negative"
-def add_three_bits(a: str, b: str, c: int) -> (str, int):
+def add_three_bits(a: str, b: str, c: int) -> (str):
     one_count = 0
     if a == '1':
         one_count += 1
@@ -102,6 +102,7 @@ def division_helper(a: str, b: str) -> int:
     return count
 
 def divide_binary_strings(a: str, b: str) -> (str):
+    print(int(a, 2), a, int(b, 2), b)
     b = b.lstrip("0")
     res = ""
     remainder = a
@@ -126,3 +127,4 @@ def divide_binary_strings(a: str, b: str) -> (str):
 
 divide_binary_strings("1111", "11")
 divide_binary_strings("111101", "1101")
+divide_binary_strings("1101101", "11101")
