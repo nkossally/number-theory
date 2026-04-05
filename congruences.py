@@ -1,7 +1,7 @@
 from gcd_euclidean_algorithm import get_gcd_euclidean_algorithm
 
-# get solutions for  ax = b mod(m)
 def get_congruences(a, b, m):
+    """Returns a list of all integers x such that ax ≡ b (mod m)."""
     divisor = get_gcd_euclidean_algorithm(a, m)
     if b % divisor != 0:
         return []
